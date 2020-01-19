@@ -1,59 +1,68 @@
-﻿import db from 'src/helpers/db';
-const Photo = db.Photo;
+﻿const db = require('src/helpers/db');
+const Photo = db.Photo,
 
-export const getAllPhotos = async () => {
-    return await Photo.find();
-};
+    getAllPhotos = async () => {
+        return await Photo.find();
+    },
 
-export const getAllPhotosByUserId = async (id) => {
-    return await Photo.find({ userId: id });
-};
+    getAllPhotosByUserId = async (id) => {
+        return await Photo.find({ userId: id });
+    },
 
-export const getPhotoById = async (id) => {
-    try {
-        const photo = await Photo.findById(id);
+    getPhotoById = async (id) => {
+        try {
+            return await Photo.findById(id);
+        } catch (e) {
+            throw { message: 'Photo not found' };
+        }
+    },
+
+    create = async (photoParam) => {
+        if (await Photo.findOne({ image: photoParam.image })) {
+            throw { message: 'Image is already exist!' };
+        }
+
+        const photo = new Photo(photoParam);
+
+        await photo.save();
+
         return photo;
-    } catch (e) {
-        throw { message: 'Photo not found' };
-    }
-};
+    },
 
-export const create = async (photoParam) => {
-    if (await Photo.findOne({ image: photoParam.image })) {
-        throw { message: 'Image is already exist!' };
-    }
+    updatePhoto = async (id, photoParam) => {
+        const photo = await Photo.findById(id);
 
-    const photo = new Photo(photoParam);
+        if (!photo) {
+            throw { message: 'Photo not found!' };
+        }
+        if (photo.image !== photoParam.image && await Photo.findOne({ image: photoParam.image })) {
+            throw { message: 'Image is already exist!' };
+        }
 
-    await photo.save();
+        Object.assign(photo, photoParam);
 
-    return photo;
-};
+        await photo.save();
+    },
 
-export const updatePhoto = async (id, photoParam) => {
-    const photo = await Photo.findById(id);
+    deletePhoto = async (id) => {
+        await Photo.findByIdAndRemove(id);
+    },
 
-    if (!photo) {
-        throw { message: 'Photo not found!' };
-    }
-    if (photo.image !== photoParam.image && await Photo.findOne({ image: photoParam.image })) {
-        throw { message: 'Image is already exist!' };
-    }
+    getPhotoByTag = async (tag) => {
+        try {
+            const landlord = await Photo.find({});
+            return await landlord.filter(photo => photo.tags.includes(tag));
+        } catch (e) {
+            throw { message: 'Tag not found' };
+        }
+    };
 
-    Object.assign(photo, photoParam);
-
-    await photo.save();
-};
-
-export const deletePhoto = async (id) => {
-    await Photo.findByIdAndRemove(id);
-};
-
-export const getPhotoByTag = async (tag) => {
-    try {
-        const landlord = await Photo.find({});
-        return await landlord.filter(photo => photo.tags.includes(tag));
-    } catch (e) {
-        throw { message: 'Tag not found' };
-    }
+module.exports = {
+    getAllPhotos,
+    getAllPhotosByUserId,
+    getPhotoById,
+    getPhotoByTag,
+    create,
+    deletePhoto,
+    updatePhoto,
 };

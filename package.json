@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start": "nodemon --exec babel-node ./src/server.js",
+        "start": "node ./src/server.js",
         "eslint": "eslint ./",
         "eslint-fix": "eslint ./ --fix"
     },

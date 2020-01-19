@@ -1,4 +1,7 @@
-export const EMAIL = 'syberry.pi@gmail.com';
+const EMAIL = 'syberry.pi@gmail.com',
+    PASSWORD = 'syberry123456789';
 
-
-export const PASSWORD = 'syberry123456789';
+module.exports = {
+    EMAIL,
+    PASSWORD,
+};

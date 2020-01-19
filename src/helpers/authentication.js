@@ -1,5 +1,5 @@
-import * as userService from '../services/user';
-const jwt = require('express-jwt'),
+const userService = require( '../services/user'),
+    expressJwt = require('express-jwt'),
     config = require('../../config/config');
 
 async function isRevoked(req, payload, done) {
@@ -13,7 +13,25 @@ async function isRevoked(req, payload, done) {
     done();
 }
 
-export const validateToken = jwt({
-    secret: config.secret,
-    isRevoked,
-});
+// const validateToken = jwt({
+//     secret: config.secret,
+//     isRevoked,
+// });
+
+
+const jwt = () => {
+    const secret = config.secret;
+    return expressJwt({
+        secret,
+        isRevoked,
+    }).unless({ path: [
+        // public routes that don't require authentication
+        '/users/authenticate',
+        '/users/register',
+        '/photos',
+        '/photos/tags',
+        /\/photos\/tags\/(.)/,
+    ] });
+};
+
+module.exports = jwt;

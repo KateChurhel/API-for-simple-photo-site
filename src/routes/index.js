@@ -1,8 +1,7 @@
-import express from 'express';
-
-import PhotosRouter from './photos';
-import UsersRouter from './users';
-import SupportRouter from './support';
+const express = require( 'express'),
+    PhotosRouter = require( '../controllers/photos'),
+    UsersRouter = require( '../controllers/users'),
+    SupportRouter = require( '../controllers/support');
 
 module.exports = express
     .Router()

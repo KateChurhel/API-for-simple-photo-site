@@ -1,10 +1,8 @@
-﻿'use strict';
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-
-require('rootpath')();
-const router = require('./routes/index');
+﻿require('rootpath')();
+const express = require('express'),
+    cors = require( 'cors'),
+    bodyParser = require('body-parser'),
+    router = require('./routes/index');
 
 const app = express();
 

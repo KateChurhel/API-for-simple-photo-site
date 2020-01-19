@@ -1,11 +1,18 @@
-﻿import * as supportService from '../services/support';
+﻿const supportService = require('../services/support'),
+    express = require( 'express');
+const router = express.Router(),
 
-export const SendEmails = async (req, res) => {
-    try {
-        const photo = await supportService.sendEmail(req.body);
+    SendEmails = async (req, res) => {
+        try {
+            const photo = await supportService.sendEmail(req.body);
 
-        res.json(photo);
-    } catch (err) {
-        res.status(400).json(err);
-    }
-};
+            res.json(photo);
+        } catch (err) {
+            res.status(400).json(err);
+        }
+    };
+
+
+router.post('/send-email', SendEmails);
+
+module.exports = router;
